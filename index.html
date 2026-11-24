@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>未来ものづくり工房</title>
+    <style>
+        :root {
+            var(--primary-blue): #0073e6;
+            --accent-orange: #ff8c00;
+            --accent-yellow: #ffcc00;
+            --bg-light: #f4f9ff;
+            --text-dark: #333333;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            color: #0073e6;
+            margin: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-placeholder {
+            width: 40px;
+            height: 40px;
+            background-color: #eee;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0073e6, #005bb5);
+            color: white;
+            padding: 80px 5%;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            color: var(--accent-yellow);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .btn-orange { background-color: var(--accent-orange); color: white; }
+        .btn-yellow { background-color: var(--accent-yellow); color: var(--text-dark); }
+        .btn-white { background-color: white; color: #0073e6; }
+
+        .section {
+            padding: 60px 5%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: #0073e6;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-yellow);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* カードのクリッカブル化 */
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,115,230,0.15);
+        }
+
+        .card h3 {
+            color: var(--accent-orange);
+            margin-top: 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 15px;
+            color: #0073e6;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* モーダル（ポップアップ）のスタイル */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 12px;
+            width: 85%;
+            max-width: 700px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: var(--text-dark);
+        }
+
+        .modal-content h3 {
+            color: #0073e6;
+            font-size: 1.8rem;
+            margin-top: 0;
+            border-bottom: 3px solid var(--accent-yellow);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 40px 5%;
+        }
+
+        footer a {
+            color: var(--accent-yellow);
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><span class="logo-placeholder"></span>未来ものづくり工房</h1>
+        <nav>
+            <a href="https://www.instagram.com/todai_fun_robot" target="_blank" class="btn btn-yellow" style="padding: 10px 20px;">Instagram</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>つくる力を、未来につなげる。</h2>
+        <p>未来ものづくり工房は、CAD、3Dプリンター、電子工作、プログラミングなどを学びながら、作品制作やイベント出展に取り組む学生団体です。<br>学生自身が設計・製作した作品を活用し、学園祭や子ども向けイベントを通じて、ものづくりの楽しさを届けています。</p>
+        
+        <div class="button-group">
+            <!-- hrefの中にGoogleフォームのURLを入れます -->
+            <a href="https://forms.gle/QYyqoyeK5NTnzLwHA" target="_blank" class="btn btn-orange">入会・見学申し込み</a>
+            
+            <a href="https://forms.gle/pvAuXwVZp2iJ5tnz9" target="_blank" class="btn btn-yellow">イベント依頼</a>
+            
+            <a href="https://forms.gle/2L5ZQcpaKESeb78g7" target="_blank" class="btn btn-white">協賛・物品提供の相談</a>
+            
+            <a href="https://forms.gle/xCFVJN4GefkuX85m7" target="_blank" class="btn btn-white">お問い合わせ</a>
+        </div>
+    </section>
+
+<section class="section" id="activities">
+        <h2 class="section-title">活動内容・代表的な作品</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">※カードをクリックすると詳細を見ることができます</p>
+        <div class="grid">
+            <!-- カード1: 技術を学ぶ・つくる (tech.htmlへ遷移) -->
+            <a href="tech.html" style="text-decoration: none; color: inherit; display: block;">
+                <div class="card">
+                    <div class="image-placeholder">【ドライブの活動写真を挿入】</div>
+                    <h3>技術を学ぶ・つくる</h3>
+                    <p>3Dプリンターや電子部品を使って、アイデアを形にします。初心者向けの勉強会も実施しています。</p>
+                    <span class="read-more">詳しく見る ＞</span>
+                </div>
+            </a>
+            
+            <!-- カード2: イベント・学園祭出展 (event.htmlへ遷移) -->
+            <a href="event.html" style="text-decoration: none; color: inherit; display: block;">
+                <div class="card">
+                    <div class="image-placeholder">【ドライブの作品写真を挿入】</div>
+                    <h3>イベント・学園祭出展</h3>
+                    <p>学園祭での展示や、学童クラブ等での子ども向けワークショップを企画・運営しています。</p>
+                    <span class="read-more">詳しく見る ＞</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>各種ご依頼や見学申し込みは、上記の各フォーム、またはInstagramよりご連絡ください。</p>
+        <p><a href="https://www.instagram.com/todai_fun_robot" target="_blank">公式Instagramはこちら</a></p>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #888;">&copy; 2026 未来ものづくり工房. All Rights Reserved.</p>
+    </footer>
+
+    <!-- ここからモーダル（ポップアップの中身） -->
+    <!-- モーダル1: 技術を学ぶ・つくる -->
+    <div id="modal-tech" class="modal" onclick="closeOutside(event, 'modal-tech')">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-tech')">&times;</span>
+            <h3>技術を学ぶ・つくる</h3>
+            <div class="image-placeholder" style="height: 250px;">【詳細用の写真を挿入】</div>
+            <h4>使用する主なツール・技術</h4>
+            <ul>
+                <li><strong>3D CAD & 3Dプリンター:</strong> オリジナルの部品やケースを設計・出力します。</li>
+                <li><strong>電子工作:</strong> ArduinoやRaspberry Piを用いて、センサーやモーターを制御します。</li>
+                <li><strong>プログラミング:</strong> C/C++やPythonを活用し、ハードウェアを動かすソフトウェアを開発します。</li>
+            </ul>
+            <h4>初心者でも安心のサポート体制</h4>
+            <p>入会者の多くは未経験からスタートしています。先輩による定期的なハンズオン形式の勉強会を実施し、基礎から自分の作りたいものを形にするまでをしっかりサポートします。</p>
+        </div>
+    </div>
+
+    <!-- モーダル2: イベント・学園祭出展 -->
+    <div id="modal-event" class="modal" onclick="closeOutside(event, 'modal-event')">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-event')">&times;</span>
+            <h3>イベント・学園祭出展</h3>
+            <div class="image-placeholder" style="height: 250px;">【詳細用の写真を挿入】</div>
+            <h4>主な活動実績</h4>
+            <ul>
+                <li><strong>学園祭での作品展示:</strong> メンバーが半年かけて制作した大型作品や、体験型の電子工作ゲームを展示し、毎年多くの来場者に楽しんでいただいています。</li>
+                <li><strong>学童クラブ・地域イベントでの出張ワークショップ:</strong> 小学生を対象に「光るコマ作り」や「プログラミング体験」など、ものづくりの楽しさを伝える教育活動を行っています。</li>
+            </ul>
+            <h4>企業様・教育機関様へ</h4>
+            <p>イベントの共同開催や、出張ワークショップのご依頼を随時受け付けております。規模や対象年齢に合わせた企画をご提案可能ですので、お気軽にお問い合わせください。</p>
+        </div>
+    </div>
+
+    <!-- JavaScript (モーダルの開閉制御) -->
+    <script>
+        // モーダルを開く
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 背景のスクロールを無効化
+        }
+
+        // モーダルを閉じる（×ボタン用）
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto'; // 背景のスクロールを有効化
+        }
+
+        // モーダルの外側の黒い背景部分をクリックした時にも閉じる
+        function closeOutside(event, modalId) {
+            if (event.target.id === modalId) {
+                closeModal(modalId);
+            }
+        }
+    </script>
+</body>
+</html>
